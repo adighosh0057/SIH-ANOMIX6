@@ -1,0 +1,90 @@
+{
+  "languages": [
+    "English",
+    "Hindi"
+  ],
+  "common cold": {
+    "overview": "The common cold is a mild viral infection.",
+    "symptoms": ["runny nose", "cough", "sore throat", "sneezing", "mild headache"],
+    "prevention": ["wash hands", "avoid sick people", "disinfect surfaces"],
+    "treatment": ["rest", "fluids", "pain relievers"],
+    "seekCare": ["high fever lasting 3+ days", "breathing difficulties"],
+    "hi": {
+      "overview": "सामान्य सर्दी एक हल्का वायरल संक्रमण है।",
+      "symptoms": ["बहती नाक", "खांसी", "गले में खराश", "छींक", "हल्का सिरदर्द"],
+      "prevention": ["हाथ धोएं", "बीमार लोगों से बचें", "सतहों को साफ करें"],
+      "treatment": ["आराम करें", "तरल पदार्थ लें", "दर्द निवारक लें"],
+      "seekCare": ["3+ दिन तक तेज बुखार", "सांस लेने में कठिनाई"]
+    }
+  },
+  "influenza": {
+    "overview": "The flu is a contagious respiratory illness.",
+    "symptoms": ["fever", "chills", "muscle aches", "cough", "fatigue"],
+    "prevention": ["annual vaccination", "hand hygiene", "avoid crowds"],
+    "treatment": ["rest", "hydration", "antiviral medications"],
+    "seekCare": ["difficulty breathing", "persistent high fever", "chest pain"],
+    "hi": {
+      "overview": "फ्लू एक संक्रामक श्वसन रोग है।",
+      "symptoms": ["बुखार", "ठंड लगना", "मांसपेशियों में दर्द", "खांसी", "थकान"],
+      "prevention": ["वार्षिक टीकाकरण", "हाथों की सफाई", "भीड़ से बचें"],
+      "treatment": ["आराम करें", "पानी पिएं", "एंटीवायरल दवाएं"],
+      "seekCare": ["सांस लेने में कठिनाई", "लगातार तेज बुखार", "सीने में दर्द"]
+    }
+  },
+  "covid-19": {
+    "overview": "COVID-19 is a respiratory illness caused by the coronavirus SARS-CoV-2.",
+    "symptoms": ["fever", "dry cough", "loss of taste or smell", "fatigue", "shortness of breath"],
+    "prevention": ["vaccination", "mask wearing", "hand hygiene", "social distancing"],
+    "treatment": ["rest", "hydration", "antiviral medications", "oxygen therapy (if severe)"],
+    "seekCare": ["trouble breathing", "persistent chest pain", "confusion", "bluish lips or face"],
+    "hi": {
+      "overview": "कोविड-19 एक श्वसन रोग है जो कोरोनावायरस SARS-CoV-2 के कारण होता है।",
+      "symptoms": ["बुखार", "सूखी खांसी", "स्वाद या गंध का जाना", "थकान", "सांस की तकलीफ"],
+      "prevention": ["टीकाकरण", "मास्क पहनना", "हाथों की सफाई", "सामाजिक दूरी"],
+      "treatment": ["आराम करें", "पानी पिएं", "एंटीवायरल दवाएं", "ऑक्सीजन थेरेपी (यदि गंभीर हो)"],
+      "seekCare": ["सांस लेने में परेशानी", "लगातार सीने में दर्द", "भ्रम", "नीले होंठ या चेहरा"]
+    }
+  },
+  "diabetes": {
+    "overview": "Diabetes is a chronic condition that affects how your body turns food into energy.",
+    "symptoms": ["increased thirst", "frequent urination", "extreme fatigue", "blurred vision", "slow-healing sores"],
+    "prevention": ["healthy diet", "regular exercise", "maintain healthy weight"],
+    "treatment": ["insulin therapy", "oral medications", "diet management", "regular monitoring"],
+    "seekCare": ["high blood sugar symptoms", "unconsciousness", "trouble breathing"],
+    "hi": {
+      "overview": "डायबिटीज एक पुरानी स्थिति है जो आपके शरीर के भोजन को ऊर्जा में बदलने के तरीके को प्रभावित करती है।",
+      "symptoms": ["अधिक प्यास लगना", "बार-बार पेशाब आना", "अत्यधिक थकान", "धुंधली दृष्टि", "घाव का धीरे-धीरे भरना"],
+      "prevention": ["स्वस्थ आहार", "नियमित व्यायाम", "स्वस्थ वजन बनाए रखें"],
+      "treatment": ["इंसुलिन थेरेपी", "मौखिक दवाएं", "आहार प्रबंधन", "नियमित निगरानी"],
+      "seekCare": ["उच्च रक्त शर्करा के लक्षण", "बेहोशी", "सांस लेने में परेशानी"]
+    }
+  },
+  "hypertension": {
+    "overview": "Hypertension, or high blood pressure, increases the risk of heart disease and stroke.",
+    "symptoms": ["often none", "headaches", "shortness of breath", "nosebleeds (rare)"],
+    "prevention": ["low-salt diet", "regular exercise", "limit alcohol", "avoid smoking"],
+    "treatment": ["lifestyle changes", "antihypertensive medications"],
+    "seekCare": ["severe headache", "chest pain", "vision changes", "difficulty breathing"],
+    "hi": {
+      "overview": "हाइपरटेंशन या उच्च रक्तचाप, हृदय रोग और स्ट्रोक के जोखिम को बढ़ाता है।",
+      "symptoms": ["अक्सर कोई लक्षण नहीं", "सिरदर्द", "सांस की तकलीफ", "नाक से खून आना (दुर्लभ)"],
+      "prevention": ["कम नमक वाला आहार", "नियमित व्यायाम", "शराब सीमित करें", "धूम्रपान से बचें"],
+      "treatment": ["जीवनशैली में बदलाव", "एंटीहाइपरटेंसिव दवाएं"],
+      "seekCare": ["तेज सिरदर्द", "सीने में दर्द", "दृष्टि में बदलाव", "सांस लेने में कठिनाई"]
+    }
+  },
+  "asthma": {
+    "overview": "Asthma is a condition in which airways narrow and swell, producing extra mucus.",
+    "symptoms": ["shortness of breath", "chest tightness", "wheezing", "coughing (especially at night)"],
+    "prevention": ["avoid triggers", "use inhalers as prescribed", "monitor symptoms"],
+    "treatment": ["inhaled corticosteroids", "bronchodilators", "avoid triggers"],
+    "seekCare": ["severe shortness of breath", "no relief from inhaler", "blue lips or face"],
+    "hi": {
+      "overview": "अस्थमा एक ऐसी स्थिति है जिसमें वायुमार्ग संकुचित और सूज जाते हैं, जिससे अतिरिक्त बलगम बनता है।",
+      "symptoms": ["सांस की तकलीफ", "सीने में जकड़न", "सीटी जैसी आवाज", "खांसी (विशेषकर रात में)"],
+      "prevention": ["ट्रिगर से बचें", "इनहेलर का उपयोग निर्देशानुसार करें", "लक्षणों की निगरानी करें"],
+      "treatment": ["इनहेल्ड कॉर्टिकोस्टेरॉइड्स", "ब्रोंकोडायलेटर", "ट्रिगर से बचें"],
+      "seekCare": ["गंभीर सांस की तकलीफ", "इनहेलर से राहत न मिले", "नीले होंठ या चेहरा"]
+    }
+  }
+}

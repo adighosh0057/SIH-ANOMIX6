@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ANOMIX - AI Health Chatbot</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#13a4ec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+  <div class="flex flex-col h-screen justify-between">
+
+    <!-- Title bar -->
+    <header class="bg-primary dark:bg-primary p-4 shadow-md flex justify-center">
+      <h1 class="text-white font-extrabold text-xl tracking-wide">ANOMIX</h1>
+    </header>
+
+    <!-- Chat area -->
+    <div id="chat-container" class="flex-grow overflow-y-auto p-4 space-y-4">
+      <div class="flex items-end gap-3">
+        <div class="flex-shrink-0">
+          <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary">local_hospital</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="bg-white dark:bg-background-dark rounded-lg rounded-bl-none p-3 shadow-sm">
+            <p class="text-black dark:text-white text-base">
+              Hello! 👋 I’m ANOMIX, your Health Assistant. Describe your symptoms, and I'll try to diagnose and suggest first aid.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <footer class="p-4 border-t border-white/10 dark:border-black/10 bg-background-light dark:bg-background-dark">
+      <div class="flex items-center gap-3">
+        <input id="user-input"
+          class="flex-grow bg-white/50 dark:bg-black/20 border-none rounded-full h-12 px-5 text-black dark:text-white placeholder-black/50 dark:placeholder-white/50 focus:ring-2 focus:ring-primary"
+          placeholder="Type your message..." type="text"/>
+        <button id="send-btn" class="w-12 h-12 flex-shrink-0 rounded-full bg-primary flex items-center justify-center text-white">
+          <span class="material-symbols-outlined">send</span>
+        </button>
+      </div>
+      <p class="text-xs text-center text-black/50 dark:text-white/50 mt-3">For informational purposes only, not a medical diagnosis.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Language selection
+    let userLang = null;
+    const HINDI_KB = {
+      "common cold": {
+        overview: "सामान्य सर्दी एक हल्का वायरल संक्रमण है।",
+        symptoms: ["बहती नाक", "गले में खराश", "छींक", "खांसी", "हल्का सिरदर्द", "हल्का बुखार"],
+        prevention: ["हाथ धोएं", "चेहरे को न छुएं", "बीमार लोगों से दूर रहें"],
+        treatment: ["आराम करें", "तरल पदार्थ लें", "दर्द निवारक", "नमक वाला स्प्रे"],
+        seekCare: ["3+ दिन तक तेज बुखार", "सांस लेने में कठिनाई", "सीने में दर्द"]
+      },
+      "influenza": {
+        overview: "फ्लू एक संक्रामक श्वसन रोग है।",
+        symptoms: ["तेज बुखार", "मांसपेशियों में दर्द", "थकान", "सूखी खांसी", "ठंड लगना", "सिरदर्द"],
+        prevention: ["वार्षिक टीकाकरण", "हाथों की सफाई", "भीड़ से बचें"],
+        treatment: ["आराम करें", "तरल पदार्थ लें", "एंटीवायरल दवाएं (डॉक्टर से)"],
+        seekCare: ["सांस लेने में परेशानी", "लगातार तेज बुखार", "भ्रम"]
+      },
+      "covid-19": {
+        overview: "कोविड-19 एक श्वसन रोग है जो कोरोनावायरस SARS-CoV-2 के कारण होता है।",
+        symptoms: ["बुखार", "खांसी", "थकान", "स्वाद/गंध का जाना", "सांस की तकलीफ", "गले में खराश"],
+        prevention: ["टीकाकरण", "मास्क", "हाथों की सफाई", "सामाजिक दूरी"],
+        treatment: ["आराम करें", "तरल पदार्थ लें", "स्थानीय स्वास्थ्य सलाह का पालन करें"],
+        seekCare: ["सांस लेने में कठिनाई", "नीले होंठ", "भ्रम", "लगातार सीने में दर्द"]
+      },
+      "migraine": {
+        overview: "माइग्रेन एक न्यूरोलॉजिकल स्थिति है जिसमें तेज सिरदर्द, मतली या प्रकाश संवेदनशीलता होती है।",
+        symptoms: ["धड़कता सिरदर्द", "मतली", "उल्टी", "प्रकाश/आवाज संवेदनशीलता"],
+        prevention: ["ट्रिगर पहचानें और बचें", "तनाव प्रबंधन", "नियमित नींद"],
+        treatment: ["आराम करें", "पानी पिएं", "दर्द निवारक या ट्रिप्टान (केवल वयस्कों के लिए)"],
+        seekCare: ["अब तक का सबसे खराब सिरदर्द", "न्यूरोलॉजिकल लक्षण", "बुखार के साथ गर्दन अकड़ना"]
+      },
+      "dengue": {
+        overview: "डेंगू एक मच्छर जनित वायरल बीमारी है जो उष्णकटिबंधीय क्षेत्रों में आम है।",
+        symptoms: ["तेज बुखार", "तेज सिरदर्द", "आंखों के पीछे दर्द", "जोड़/मांसपेशियों में दर्द", "चकत्ते", "मतली"],
+        prevention: ["मच्छर के काटने से बचें", "खड़े पानी को हटाएं", "मच्छरदानी का उपयोग करें"],
+        treatment: ["तरल पदार्थ लें", "बुखार/दर्द के लिए पेरासिटामोल", "NSAIDs से बचें"],
+        seekCare: ["तेज पेट दर्द", "खून आना", "लगातार उल्टी", "अत्यधिक नींद आना"]
+      }
+    };
+    // Show language selection prompt at start
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        addMessage('Please select your language / कृपया अपनी भाषा चुनें:', 'bot');
+        addMessage('Type "English" or "Hindi" to continue.', 'bot');
+      }, 300);
+    });
+    const DISEASE_KB = {
+      "common cold": {
+        "overview": "The common cold is a mild viral infection of the upper respiratory tract.",
+        "symptoms": ["runny nose", "sore throat", "sneezing", "cough", "mild headache", "low fever"],
+        "prevention": ["wash hands", "avoid face touching", "stay clear of sick people"],
+        "treatment": ["rest", "fluids", "pain relievers", "saline nasal spray"],
+        "seekCare": ["high fever lasting 3+ days", "breathing difficulty", "chest pain"]
+      },
+      "influenza": {
+        "overview": "Flu is a contagious respiratory illness caused by influenza viruses.",
+        "symptoms": ["high fever", "muscle aches", "fatigue", "dry cough", "chills", "headache"],
+        "prevention": ["annual vaccination", "hand hygiene", "avoid crowds when ill"],
+        "treatment": ["rest", "fluids", "antiviral drugs (doctor prescribed)"],
+        "seekCare": ["trouble breathing", "persistent high fever", "confusion"]
+      },
+      "covid-19": {
+        "overview": "COVID-19 is a respiratory illness caused by coronavirus SARS-CoV-2.",
+        "symptoms": ["fever", "cough", "fatigue", "loss of taste/smell", "shortness of breath", "sore throat"],
+        "prevention": ["vaccination", "mask use", "hand hygiene", "social distancing"],
+        "treatment": ["rest", "fluids", "follow local health guidance"],
+        "seekCare": ["difficulty breathing", "bluish lips", "confusion", "persistent chest pain"]
+      },
+      "migraine": {
+        "overview": "Migraine is a neurological condition causing severe headaches often with nausea or light sensitivity.",
+        "symptoms": ["throbbing headache", "nausea", "vomiting", "light/sound sensitivity"],
+        "prevention": ["identify and avoid triggers", "stress management", "regular sleep"],
+        "treatment": ["rest", "hydration", "pain relievers or triptans adults only"],
+        "seekCare": ["worst headache ever", "neurological symptoms", "stiff neck with fever"]
+      },
+      "dengue": {
+        "overview": "Dengue is a mosquito-borne viral disease common in tropical regions.",
+        "symptoms": ["high fever", "severe headache", "pain behind eyes", "joint/muscle pain", "rash", "nausea"],
+        "prevention": ["avoid mosquito bites", "remove standing water", "use mosquito nets"],
+        "treatment": ["fluids", "acetaminophen for fever/pain", "avoid NSAIDs"],
+        "seekCare": ["severe abdominal pain", "bleeding", "persistent vomiting", "drowsiness"]
+      }
+      // Add more diseases and details here
+    };
+
+    const greetings = ["hi", "hello", "hey", "hola", "yo", "good morning", "good evening"];
+    let lastBotResponse = null;
+
+    function guessDisease(message) {
+      const msg = message.toLowerCase();
+      for (const [disease, info] of Object.entries(DISEASE_KB)) {
+        let matchCount = 0;
+        for (const symptom of info.symptoms) {
+          if (msg.includes(symptom)) {
+            matchCount += 1;
+          }
+        }
+        if (matchCount >= 2) {
+          return disease;
+        }
+      }
+      return null;
+    }
+
+    function getResponse(message) {
+      const lowerMsg = message.toLowerCase();
+
+      // Language selection logic
+      if (!userLang) {
+        if (lowerMsg.includes('hindi')) {
+          userLang = 'hindi';
+          return 'आपने हिंदी चुनी है। कृपया अपने लक्षण लिखें।';
+        } else if (lowerMsg.includes('english')) {
+          userLang = 'english';
+          return 'You have selected English. Please describe your symptoms.';
+        } else {
+          return 'Please type "English" or "Hindi" to select your language.';
+        }
+      }
+
+      // Greeting response
+      if (greetings.some(greet => lowerMsg.startsWith(greet))) {
+        if (userLang === 'hindi') {
+          const greetingResponses = [
+            "नमस्ते, मैं आपकी कैसे मदद कर सकता हूँ?",
+            "हैलो! कृपया अपने लक्षण बताएं।",
+            "स्वागत है! बताएं आपको कैसा महसूस हो रहा है।"
+          ];
+          return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
+        } else {
+          const greetingResponses = [
+            "Hey, how can I help you today?",
+            "Hello! Please describe your symptoms.",
+            "Hi there! Tell me how you feel."
+          ];
+          return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
+        }
+      }
+
+      // Disease guess
+      const diseaseGuess = guessDisease(lowerMsg);
+      if (diseaseGuess) {
+        if (userLang === 'hindi') {
+          const info = HINDI_KB[diseaseGuess];
+          return `आपके लक्षणों के आधार पर, आपको ${diseaseGuess} हो सकता है। ${info.overview} प्राथमिक उपचार: ${info.treatment.join(", ")}. डॉक्टर से मिलें यदि: ${info.seekCare.join(", ")}.`;
+        } else {
+          const info = DISEASE_KB[diseaseGuess];
+          return `Based on your symptoms, you might have ${diseaseGuess}. ${info.overview} For first aid, you can: ${info.treatment.join(", ")}. See a doctor if you experience: ${info.seekCare.join(", ")}.`;
+        }
+      }
+
+      // Fallback
+      if (userLang === 'hindi') {
+        return "धन्यवाद। कृपया और लक्षण या विवरण साझा करें जिससे मैं बेहतर सहायता कर सकूं।";
+      } else {
+        return "Thanks for sharing. Could you tell me more symptoms or details to help diagnose?";
+      }
+    }
+
+    function addMessage(message, sender = "user") {
+      const chatContainer = document.getElementById("chat-container");
+
+      const wrapper = document.createElement("div");
+      wrapper.className = `flex items-end gap-3 ${sender === "user" ? "justify-end" : ""}`;
+
+      if (sender !== "user") {
+        const avatarWrap = document.createElement("div");
+        avatarWrap.className = "flex-shrink-0";
+        const avatar = document.createElement("div");
+        avatar.className = "w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center";
+        const icon = document.createElement("span");
+        icon.className = "material-symbols-outlined text-primary";
+        icon.textContent = "local_hospital";
+        avatar.appendChild(icon);
+        avatarWrap.appendChild(avatar);
+        wrapper.appendChild(avatarWrap);
+      }
+
+      const bubble = document.createElement("div");
+      bubble.className = sender === "user"
+        ? "bg-primary text-white rounded-lg rounded-br-none p-3 max-w-xs whitespace-pre-line"
+        : "bg-white dark:bg-background-dark text-black dark:text-white rounded-lg rounded-bl-none p-3 max-w-xs shadow-sm whitespace-pre-line";
+      bubble.textContent = message;
+
+      if (sender === "user") {
+        wrapper.appendChild(bubble);
+        const spacer = document.createElement("div");
+        spacer.className = "flex-shrink-0 w-10 h-10";
+        wrapper.appendChild(spacer);
+      } else {
+        const contentWrap = document.createElement("div");
+        contentWrap.className = "flex-1";
+        contentWrap.appendChild(bubble);
+        wrapper.appendChild(contentWrap);
+      }
+
+      chatContainer.appendChild(wrapper);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      addMessage(userMessage, "user");
+      input.value = "";
+
+      // Prevent repetitive bot responses
+      let botReply = getResponse(userMessage);
+      if (botReply === lastBotResponse) {
+        botReply = "Sorry if I'm repeating myself. Could you please provide more details?";
+      }
+      lastBotResponse = botReply;
+      addMessage(botReply, "bot");
+    }
+
+    document.getElementById("send-btn").addEventListener("click", sendMessage);
+    document.getElementById("user-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
