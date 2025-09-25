@@ -4,7 +4,6 @@
 
 A multilingual AI-powered health chatbot designed to assist rural and semi-urban communities with preventive healthcare, first aid, vaccination schedules, and outbreak alerts. Built as part of a hackathon project, the chatbot aims to make healthcare information accessible, affordable, and user-friendly through a conversational interface.
 
-View it here (https://cbb1e9f310f0ae3bbf.gradio.live/)
 
 🚀 Features
 
